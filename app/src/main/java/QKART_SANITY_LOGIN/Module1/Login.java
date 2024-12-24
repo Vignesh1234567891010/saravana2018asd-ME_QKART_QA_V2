@@ -1,14 +1,14 @@
 package QKART_SANITY_LOGIN.Module1;
 
 import java.time.Duration;
-
+import java.util.NoSuchElementException;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Login {
     RemoteWebDriver driver;
@@ -32,7 +32,7 @@ public class Login {
         username_txt_box.sendKeys(Username);
 
         // Wait for user name to be entered
-        Thread.sleep(1000);
+        //Thread.sleep(1000);
 
         // Find the password Text Box
         WebElement password_txt_box = this.driver.findElement(By.id("password"));
@@ -46,10 +46,19 @@ public class Login {
         // Click the login Button
         login_button.click();
 
+        // SLEEP_STMT_13: Wait for Login to Complete
         // Wait for Login action to complete
-        Thread.sleep(5000);
+        //Thread.sleep(5000);
+        FluentWait<RemoteWebDriver> fluentWait = new FluentWait<RemoteWebDriver>(driver);
+        fluentWait.withTimeout(Duration.ofSeconds(30));
+        fluentWait.pollingEvery(Duration.ofMillis(250));
+        
+        fluentWait.until(ExpectedConditions.invisibilityOf(login_button));
 
         return this.VerifyUserLoggedIn(Username);
+        
+
+        
     }
 
     public Boolean VerifyUserLoggedIn(String Username) {

@@ -32,14 +32,16 @@ public class Checkout {
              * Click on the "Add new address" button, enter the addressString in the address
              * text box and click on the "ADD" button to save the address
              */
+            WebDriverWait wait = new WebDriverWait(driver, 5);
             WebElement addNewAddressBtn = driver.findElement(By.xpath("//button[@id='add-new-btn']"));
             addNewAddressBtn.click();
             WebElement textBox = driver.findElement(By.xpath("//textarea[@placeholder='Enter your complete address']"));
             textBox.sendKeys(addresString);
-            Thread.sleep(1000);
+            
             WebElement addBtn=driver.findElement(By.xpath("//button[@class='MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root  css-177pwqq']"));
             addBtn.click();
-            Thread.sleep(2000);
+            //Thread.sleep(2000);
+            wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//p[@class='MuiTypography-root MuiTypography-body1 css-yg30e6']"), addresString));
             return false;
         } catch (Exception e) {
             System.out.println("Exception occurred while entering address: " + e.getMessage());

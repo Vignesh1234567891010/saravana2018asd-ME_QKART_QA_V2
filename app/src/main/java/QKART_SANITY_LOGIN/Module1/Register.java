@@ -26,6 +26,7 @@ public class Register {
 
     public Boolean registerUser(String Username, String Password, Boolean makeUsernameDynamic)
             throws InterruptedException {
+                WebDriverWait wait = new WebDriverWait(driver, 5);
         // Find the Username Text Box
         WebElement username_txt_box = this.driver.findElement(By.id("username"));
 
@@ -33,12 +34,12 @@ public class Register {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
         String test_data_username;
-        if (makeUsernameDynamic)
+        if (makeUsernameDynamic){
             // Concatenate the timestamp to string to form unique timestamp
             test_data_username = Username + "_" + String.valueOf(timestamp.getTime());
-        else
+        }else{
             test_data_username = Username;
-
+            }   
         // Type the generated username in the username field
         username_txt_box.sendKeys(test_data_username);
 
@@ -62,9 +63,14 @@ public class Register {
         // Click the register now button
         register_now_button.click();
         // Wait for registration to complete
-        Thread.sleep(3000);
+        //Thread.sleep(3000);
 
-
+        // SLEEP_STMT_06: Wait for new user to get created in the backend
+        if(makeUsernameDynamic){
+            wait.until(ExpectedConditions.urlContains("/login"));
+        }else{
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='notistack-snackbar']")));
+        }
         this.lastGeneratedUsername = test_data_username;
 
         return this.driver.getCurrentUrl().endsWith("/login");
